@@ -1,28 +1,26 @@
 import hashlib
 import json
+import queue
 from abc import ABC, abstractmethod
-from collections import deque
-from collections.abc import Callable
-from threading import Condition
-from typing import Any, Optional
+from typing import Any, Callable
 
 
 class Queue(ABC):
     @abstractmethod
     def put(self, item: Any) -> None:
-        pass
+        ...
 
     @abstractmethod
-    def get(self) -> Optional[Any]:
-        pass
+    def get(self, block: bool = True, timeout: float | None = None) -> Any:
+        ...
 
     @abstractmethod
     def is_empty(self) -> bool:
-        pass
+        ...
 
     @abstractmethod
     def task_done(self) -> None:
-        pass
+        ...
 
     @staticmethod
     def dict_hash(d: dict[str, Any]) -> str:
@@ -31,35 +29,32 @@ class Queue(ABC):
 
 
 class InMemoryQueue(Queue):
-    def __init__(self, dedup_keys_func: Callable[[dict[str, Any]], dict]) -> None:
-        self._queue = deque()
-        self._cv = Condition()
-        self.deduplication_set = set()
-        self.dedup_keys_func = dedup_keys_func
+    def __init__(self, dedup_keys_func: Callable[[Any], dict], maxsize: int = 0):
+        self._queue = queue.Queue(maxsize=maxsize)
+        self._keys: set[str] = set()
+        self._dedup_keys_func = dedup_keys_func
 
-    def is_in_queue(self, item: Any):
-        return (
-            InMemoryQueue.dict_hash(self.dedup_keys_func(item))
-            in self.deduplication_set
-        )
+    def _make_key(self, item: Any) -> str:
+        keys = self._dedup_keys_func(item)
+        if not isinstance(keys, dict):
+            raise TypeError("dedup_keys_func must return a dict")
+        return Queue.dict_hash(keys)
 
     def put(self, item: Any) -> None:
-        with self._cv:
-            if self.is_in_queue(item):
-                return
-            self._queue.append(item)
-            self.deduplication_set.add(item)
-            self._cv.notify()
+        key = self._make_key(item)
+        if key in self._keys:
+            return
+        self._queue.put(item)
+        self._keys.add(key)
 
-    def get(self) -> Optional[Any]:
-        with self._cv:
-            while not self._queue:
-                self._cv.wait()
-            return self._queue.popleft()
+    def get(self, block: bool = True, timeout: float | None = None) -> Any:
+        item = self._queue.get(block=block, timeout=timeout)
+        key = self._make_key(item)
+        self._keys.discard(key)
+        return item
 
     def is_empty(self) -> bool:
-        with self._cv:
-            return len(self._queue) == 0
+        return self._queue.empty()
 
     def task_done(self) -> None:
-        pass
+        self._queue.task_done()
