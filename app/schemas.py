@@ -1,3 +1,5 @@
+import uuid
+from datetime import datetime
 from typing import Optional
 
 from sqlmodel import SQLModel
@@ -14,8 +16,8 @@ class ItemUpdate(SQLModel):
 
 
 class ItemResponse(SQLModel):
-    id: str
+    id: uuid.UUID
     name: str
-    description: Optional[str]
-    created_at: str
-    updated_at: str
+    description: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
