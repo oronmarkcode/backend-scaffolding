@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "backend-scaffolding"
+version = "0.1.0"
+description = "FastAPI backend scaffolding with SQLModel and Alembic"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.104.1"
+uvicorn = {extras = ["standard"], version = "^0.24.0"}
+sqlmodel = "^0.0.8"
+alembic = "^1.12.1"
+psycopg2-binary = "^2.9.9"
+python-multipart = "^0.0.6"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+pytest-asyncio = "^0.21.1"
+httpx = "^0.25.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+start = "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload" 
