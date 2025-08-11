@@ -1,8 +1,5 @@
-from typing import Any
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pytest import yield_fixture
 
 from app.api import items
 from app.utils.queue import InMemoryQueue
@@ -15,7 +12,6 @@ app = FastAPI(
     version="0.1.0",
 )
 
-# CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -24,11 +20,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
 app.include_router(items.router)
 
 
-# Health check endpoint
 @app.get("/health")
 def health_check():
     """Health check endpoint"""
@@ -37,8 +31,7 @@ def health_check():
 
 @app.on_event("startup")
 async def startup_event():
-    """Create testdb database on startup"""
-
+    pass
     # def do_work(x: Any):
     #     print(x)
 
