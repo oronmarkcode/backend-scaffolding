@@ -28,34 +28,13 @@ class AIProvider(ABC):
         self.embedding_config = embedding_config
 
     @abstractmethod
-    def invoke(
-        self,
-        messages: List[Message],
-        *,
-        temperature: float = 0.7,
-        max_tokens: int = 512,
-        stop: Optional[List[str]] = None,
-        model: Optional[str] = None,
-    ) -> str:
+    def invoke(self, messages: List[Message]) -> str:
         raise NotImplementedError
 
     @abstractmethod
-    def stream(
-        self,
-        messages: List[Message],
-        *,
-        temperature: float = 0.7,
-        max_tokens: int = 512,
-        stop: Optional[List[str]] = None,
-        model: Optional[str] = None,
-    ) -> Iterator[str]:
+    def stream(self, messages: List[Message]) -> Iterator[str]:
         raise NotImplementedError
 
     @abstractmethod
-    def embed(
-        self,
-        texts: List[str],
-        *,
-        model: Optional[str] = None,
-    ) -> List[List[float]]:
+    def embed(self, texts: List[str]) -> List[List[float]]:
         raise NotImplementedError
