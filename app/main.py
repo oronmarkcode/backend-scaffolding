@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .api import items
-from .database import create_db_and_tables
+from app.api import items
+from app.database import create_test_db
 
 app = FastAPI(
     title="Backend Scaffolding",
@@ -30,8 +30,8 @@ def health_check():
 
 @app.on_event("startup")
 async def startup_event():
-    """Create database tables on startup"""
-    create_db_and_tables()
+    """Create testdb database on startup"""
+    create_test_db()
 
 
 if __name__ == "__main__":

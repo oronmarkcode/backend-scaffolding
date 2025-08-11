@@ -1,10 +1,10 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
-from ..database import get_session
-from ..models import Item
-from ..schemas import ItemCreate, ItemUpdate, ItemResponse
-from ..crud import create_item, get_items, get_item, update_item, delete_item
+from app.database import get_session
+from app.models import Item
+from app.schemas import ItemCreate, ItemUpdate, ItemResponse
+from app.crud import create_item, get_items, get_item, update_item, delete_item
 
 router = APIRouter(prefix="/items", tags=["items"])
 

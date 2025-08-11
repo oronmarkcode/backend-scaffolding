@@ -1,7 +1,7 @@
 from typing import List
 from sqlmodel import Session, select
-from .models import Item
-from .schemas import ItemCreate, ItemUpdate
+from app.models import Item
+from app.schemas import ItemCreate, ItemUpdate
 
 
 def create_item(session: Session, item: ItemCreate) -> Item:
