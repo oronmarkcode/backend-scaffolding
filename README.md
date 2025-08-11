@@ -119,7 +119,7 @@ The project includes a simple `Item` model with:
 1. Add the model to `app/models.py`
 2. Create a new Alembic migration:
    ```bash
-   poetry run alembic revision --autogenerate -m "Add new model"
+   alembic revision --autogenerate -m "Add new model"
    ```
 3. Apply the migration:
    ```bash
