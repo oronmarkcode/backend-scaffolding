@@ -7,13 +7,14 @@ from app.crud import create_item, delete_item, get_item, get_items, update_item
 from app.database import get_session
 from app.models import Item
 from app.schemas import ItemCreate, ItemResponse, ItemUpdate
+from dependencies import ingest_queue
 
 router = APIRouter(prefix="/items", tags=["items"])
 
 
 @router.post("/", response_model=ItemResponse)
 def create_new_item(item: ItemCreate, session: Session = Depends(get_session)):
-    """Create a new item"""
+    ingest_queue.put(item.name)
     db_item = create_item(session, item)
     return ItemResponse.from_orm(db_item)
 
