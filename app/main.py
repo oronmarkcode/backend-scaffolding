@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.api import items
 from app.database import create_test_db
 
 app = FastAPI(
     title="Backend Scaffolding",
     description="A simple FastAPI backend with SQLModel and Alembic",
-    version="0.1.0"
+    version="0.1.0",
 )
 
 # CORS middleware
@@ -20,6 +21,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(items.router)
+
 
 # Health check endpoint
 @app.get("/health")
@@ -36,4 +38,5 @@ async def startup_event():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000) 
+
+    uvicorn.run(app, host="0.0.0.0", port=8000)

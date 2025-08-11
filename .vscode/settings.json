@@ -51,4 +51,4 @@
         "**/htmlcov": true,
         "**/.coverage": true
     }
-} 
+}

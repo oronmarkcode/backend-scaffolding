@@ -1,5 +1,7 @@
 from typing import List
+
 from sqlmodel import Session, select
+
 from app.models import Item
 from app.schemas import ItemCreate, ItemUpdate
 
@@ -41,4 +43,4 @@ def delete_item(session: Session, item_id: str) -> bool:
         session.add(db_item)
         session.commit()
         return True
-    return False 
+    return False

@@ -171,4 +171,4 @@ cp env.example .env
 
 ## License
 
-This is a template project. Modify as needed for your use case. 
+This is a template project. Modify as needed for your use case.

@@ -1,8 +1,9 @@
 import uuid
 from datetime import datetime, timezone
 from typing import Optional
-from sqlmodel import SQLModel, Field
+
 from sqlalchemy import func
+from sqlmodel import Field, SQLModel
 
 
 class Base(SQLModel):
@@ -27,4 +28,4 @@ class TimestampMixin(SQLModel):
 
 class Item(Base, TimestampMixin, table=True):
     name: str = Field(max_length=100, nullable=False)
-    description: Optional[str] = Field(max_length=500, nullable=True) 
+    description: Optional[str] = Field(max_length=500, nullable=True)

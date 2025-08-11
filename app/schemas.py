@@ -1,4 +1,5 @@
 from typing import Optional
+
 from sqlmodel import SQLModel
 
 
@@ -17,4 +18,4 @@ class ItemResponse(SQLModel):
     name: str
     description: Optional[str]
     created_at: str
-    updated_at: str 
+    updated_at: str

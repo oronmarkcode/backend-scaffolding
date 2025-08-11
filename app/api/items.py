@@ -1,10 +1,12 @@
 from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
+
+from app.crud import create_item, delete_item, get_item, get_items, update_item
 from app.database import get_session
 from app.models import Item
-from app.schemas import ItemCreate, ItemUpdate, ItemResponse
-from app.crud import create_item, get_items, get_item, update_item, delete_item
+from app.schemas import ItemCreate, ItemResponse, ItemUpdate
 
 router = APIRouter(prefix="/items", tags=["items"])
 
@@ -33,7 +35,9 @@ def read_item(item_id: str, session: Session = Depends(get_session)):
 
 
 @router.put("/{item_id}", response_model=ItemResponse)
-def update_existing_item(item_id: str, item: ItemUpdate, session: Session = Depends(get_session)):
+def update_existing_item(
+    item_id: str, item: ItemUpdate, session: Session = Depends(get_session)
+):
     """Update an existing item"""
     db_item = update_item(session, item_id, item)
     if not db_item:
@@ -47,4 +51,4 @@ def delete_existing_item(item_id: str, session: Session = Depends(get_session)):
     success = delete_item(session, item_id)
     if not success:
         raise HTTPException(status_code=404, detail="Item not found")
-    return {"message": "Item deleted successfully"} 
+    return {"message": "Item deleted successfully"}
